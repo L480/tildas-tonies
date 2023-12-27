@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de" data-bs-theme="light">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tilda's Tonies 🎵</title>
+    <meta name="description" content="Dies ist eine Liste aller meiner Tonies ☺️">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+        integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"
+        integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        async function getTonies() {
+            // Get JSON data
+            let jsonData = await fetch('https://api.tildas-tonies.de').then((res) => res.json());
+            // Get the container element where the table will be inserted
+            let container = document.getElementById("table");
+            // Create the table element
+            let table = document.createElement("table");
+            // Get the keys (column names) of the first object in the JSON data
+            let cols = Object.keys(jsonData[0]);
+            // Create the header element
+            let thead = document.createElement("thead");
+            let tr = document.createElement("tr");
+            /*
+            // Loop through the column names and create header cells
+            cols.forEach((item) => {
+                let th = document.createElement("th");
+                th.innerText = item; // Set the column name as the text of the header cell
+                tr.appendChild(th); // Append the header cell to the header row
+            });
+            */
+            thead.appendChild(tr); // Append the header row to the header
+            table.append(tr) // Append the header to the table
+            // Loop through the JSON data and create table rows
+            jsonData.forEach((item) => {
+                let tr = document.createElement("tr");
+                // Get the values of the current object in the JSON data
+                let vals = Object.values(item);
+                // Loop through the values and create table cells
+                vals.forEach((elem) => {
+                    let td = document.createElement("td");
+                    // Set the value as the text of the table cell
+                    if (elem.startsWith("http")) {
+                        td.innerHTML = '<img style="display: inline; height: 5em; width: auto;" src="' + elem + '">';
+                    } else {
+                        td.innerHTML = elem;
+                    }
+                    tr.appendChild(td); // Append the table cell to the table row
+                });
+                table.appendChild(tr); // Append the table row to the table
+            });
+            container.appendChild(table) // Append the table to the container element
+        }
+    </script>
+    <style>
+        body {
+            margin-top: 2em;
+            margin-bottom: 2em;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+
+        div {
+            margin-bottom: 2em;
+        }
+
+        td {
+            padding: 0.5em;
+        }
+    </style>
+</head>
+
+<body onLoad="getTonies()">
+    <div class="d-grid gap-2 col-9 col-md-8 col-lg-6 col-xl-5 col-xxl-4 mx-auto">
+        <div>
+            <h1>Hallo, Du 👋</h1>
+            Hier findest du eine Liste aller meiner Tonies 🎵
+        </div>
+
+        <div id="table"></div>
+
+        <div>
+            Ich würde mich über jeden weiteren Tonie freuen, der noch nicht auf der Liste steht.<br><br>
+            <h5>Eure Tilda ❤️</h5>
+        </div>
+
+        <div class="mx-auto">
+            <a href="https://github.com/L480/tildas-tonies" target="_blank"><img style="height: 1.5em; width: auto;"
+                    src="https://upload.wikimedia.org/wikipedia/commons/c/c2/GitHub_Invertocat_Logo.svg"></a>
+        </div>
+    </div>
+</body>
+
+</html>
