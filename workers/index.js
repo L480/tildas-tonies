@@ -3,7 +3,7 @@ export default {
         const tokenEndpoint = 'https://login.tonies.com/auth/realms/tonies/protocol/openid-connect/token';
         const graphqlEndpoint = 'https://api.prod.tcs.toys/v2/graphql';
         const tokenBody = 'grant_type=refresh_token&refresh_token=' + await env.kv.get('REFRESH_TOKEN') + '&client_id=my-tonies';
-        const graphqlBody = '{"query":"query Tonies {\n  households {\n    contentTonies {\n      title\n      series {\n        name\n      }\n      imageUrl\n    }\n    creativeTonies {\n      name\n      imageUrl\n    }\n  }\n}","operationName":"Tonies"}';
+        const graphqlBody = '{ "query": "query Tonies { households { contentTonies { title series { name } imageUrl } creativeTonies { name imageUrl }}}", "operationName": "Tonies" }';
         const useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
         const cacheTtl = 3600;
         const cf = {
@@ -51,14 +51,15 @@ export default {
             cf: cf
         });
         const graphqlResponse = await gatherResponse(graphqlRequest);
-        console.log(graphqlResponse);
+
         // Parse content tonies
         const contentTonies = graphqlResponse.data.households[0].contentTonies;
         for (let x in contentTonies) {
             allTonies.push({ image: contentTonies[x].imageUrl, name: contentTonies[x].series.name + ' - ' + contentTonies[x].title });
         }
+
         // Parse creative tonies
-        const creativeTonies = graphqlResponse.data.households[0].contentTonies;
+        const creativeTonies = graphqlResponse.data.households[0].creativeTonies;
         for (let x in creativeTonies) {
             allTonies.push({ image: creativeTonies[x].imageUrl, name: creativeTonies[x].name });
         }
