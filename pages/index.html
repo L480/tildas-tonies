@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
         integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"
-        integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         async function getTonies() {
             // Get JSON data
@@ -54,6 +51,7 @@
                 });
                 table.appendChild(tr); // Append the table row to the table
             });
+            document.getElementById("spinner").remove();
             container.appendChild(table) // Append the table to the container element
         }
     </script>
@@ -85,7 +83,11 @@
             Hier findest du eine Liste aller meiner Tonies 🎵
         </div>
 
-        <div id="table"></div>
+        <div id="table">
+            <div id="spinner" class="d-flex justify-content-center">
+                <div class="spinner-border" role="status"></div>
+            </div>
+        </div>
 
         <div>
             Ich würde mich über jeden weiteren Tonie freuen, der noch nicht auf der Liste steht.<br><br>
@@ -97,6 +99,10 @@
                     src="https://upload.wikimedia.org/wikipedia/commons/c/c2/GitHub_Invertocat_Logo.svg"></a>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"
+        integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
 </html>
