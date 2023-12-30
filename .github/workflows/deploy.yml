@@ -8,6 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: 
+      name: Cloudflare Prod
+      url: https://tildas-tonies.de
     name: Deploy
     steps:
       - name: Check out repository
