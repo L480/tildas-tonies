@@ -1,4 +1,7 @@
 export default {
+    async scheduled(event, env, ctx) {
+        await this.fetch(event, env, ctx);
+    },
     async fetch(request, env, ctx) {
         const tokenEndpoint = 'https://login.tonies.com/auth/realms/tonies/protocol/openid-connect/token';
         const graphqlEndpoint = 'https://api.prod.tcs.toys/v2/graphql';
