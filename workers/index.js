@@ -1,6 +1,6 @@
 export default {
     async scheduled(event, env, ctx) {
-        await this.fetch(event, env, ctx);
+        await this.fetch(event, env, ctx); // To keep the access token fresh when no one is accessing the page.
     },
     async fetch(request, env, ctx) {
         const tokenEndpoint = 'https://login.tonies.com/auth/realms/tonies/protocol/openid-connect/token';
@@ -15,20 +15,6 @@ export default {
         };
         let allTonies = [];
 
-        /**
-         * gatherResponse awaits and returns a response body as a string.
-         * Use await gatherResponse(..) in an async function to get the response body
-         * @param {Response} response
-         */
-        async function gatherResponse(response) {
-            const { headers } = response;
-            const contentType = headers.get("content-type") || "";
-            if (contentType.includes("application/json")) {
-                return await response.json();
-            }
-            return response.text();
-        }
-
         // Get access token and save new refresh token to KV
         const tokenRequest = await fetch(tokenEndpoint, {
             body: tokenBody,
@@ -39,7 +25,7 @@ export default {
             },
             cf: cf
         });
-        const tokenResponse = await gatherResponse(tokenRequest);
+        const tokenResponse = await tokenRequest.json();
         await env.kv.put('REFRESH_TOKEN', tokenResponse.refresh_token);
 
         // Get tonies
@@ -53,7 +39,7 @@ export default {
             },
             cf: cf
         });
-        const graphqlResponse = await gatherResponse(graphqlRequest);
+        const graphqlResponse = await graphqlRequest.json();
 
         // Parse content tonies
         const contentTonies = graphqlResponse.data.households[0].contentTonies;
