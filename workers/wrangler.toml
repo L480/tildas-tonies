@@ -6,5 +6,9 @@ route = { pattern = "api.tildas-tonies.de", custom_domain = true }
 kv_namespaces = [
   { binding = "kv", id = "__CLOUDFLARE_KV_ID__" }
 ]
+
 [triggers]
-crons = ["0 13 * * sat"]
+crons = ["0 13 * * sat"] # To keep the access token fresh when no one is accessing the page.
+
+[vars]
+CORS_ORIGINS = "https://tildas-tonies.de"

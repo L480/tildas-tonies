@@ -15,6 +15,15 @@ export default {
         };
         let allTonies = [];
 
+        async function gatherResponse(response) {
+            const { headers } = response;
+            const contentType = headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                return await response.json();
+            }
+            return response.text();
+        }
+
         // Get access token and save new refresh token to KV
         const tokenRequest = await fetch(tokenEndpoint, {
             body: tokenBody,
@@ -25,7 +34,10 @@ export default {
             },
             cf: cf
         });
-        const tokenResponse = await tokenRequest.json();
+        const tokenResponse = await gatherResponse(tokenRequest);
+        if (tokenRequest.status != 200) {
+            console.error(tokenResponse);
+        }
         await env.kv.put('REFRESH_TOKEN', tokenResponse.refresh_token);
 
         // Get tonies
@@ -39,7 +51,10 @@ export default {
             },
             cf: cf
         });
-        const graphqlResponse = await graphqlRequest.json();
+        const graphqlResponse = await gatherResponse(graphqlRequest);
+        if (graphqlRequest.status != 200) {
+            console.error(graphqlResponse);
+        }
 
         // Parse content tonies
         const contentTonies = graphqlResponse.data.households[0].contentTonies;
@@ -56,7 +71,7 @@ export default {
         // JSON response with cache and CORS
         const response = new Response(JSON.stringify(allTonies));
         response.headers.set('Cache-Control', 'max-age=' + cacheTtl);
-        response.headers.set('Access-Control-Allow-Origin', 'https://tildas-tonies.de');
+        response.headers.set('Access-Control-Allow-Origin', env.CORS_ORIGINS);
         return response;
     },
 };
