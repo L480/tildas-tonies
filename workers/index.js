@@ -69,10 +69,12 @@ export default {
         }
 
         // JSON response with cache and CORS
-        const response = new Response(JSON.stringify(allTonies));
-        response.headers.set('Content-Type', 'application/json');
-        response.headers.set("Cache-Control", "max-age=" + cacheTtl);
-        response.headers.set("Access-Control-Allow-Origin", env.CORS_ORIGINS);
-        return response;
+        return Response.json(allTonies, {
+            headers: {
+                'Cache-Control': 'max-age=' + cacheTtl,
+                'Access-Control-Allow-Origin': env.CORS_ORIGINS,
+                'Access-Control-Allow-Methods': 'GET',
+            }
+        });
     },
 };
